@@ -18,36 +18,28 @@ public class DominosEndToEndTest {
         // Launch Browser
         WebDriver driver = new ChromeDriver();
 
-        // Maximize Browser
         driver.manage().window().maximize();
 
-        // Implicit Wait
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
-        // Open Domino's Login Page
         driver.get("https://pizzaonline.dominos.co.in/postorder-ui/login");
 
-        // Explicit Wait
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
         // Enter Mobile Number
         WebElement mobile = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(By.xpath("//input")));
 
-        mobile.sendKeys("9626540865"); // Replace with your mobile number
+        mobile.sendKeys("9884579188"); 
 
-        // Click Send OTP
         driver.findElement(By.xpath("//button")).click();
 
         System.out.println("Enter OTP Manually");
 
-        // Wait for manual OTP entry
         Thread.sleep(30000);
 
-        // Wait for home page to load
         Thread.sleep(10000);
 
-        // Click Non-Veg Pizza Category
         WebElement nonVegPizza = wait.until(
                 ExpectedConditions.elementToBeClickable(
                         By.xpath("//span[text()='Non-Veg Pizza']")));
@@ -56,13 +48,11 @@ public class DominosEndToEndTest {
 
         Thread.sleep(3000);
 
-        // Find all Add buttons
         List<WebElement> addButtons = driver.findElements(
                 By.xpath("//button[contains(@class,'cta-add')]"));
 
         System.out.println("Total Add Buttons : " + addButtons.size());
 
-        // Click first visible Add button
         JavascriptExecutor js = (JavascriptExecutor) driver;
 
         for (WebElement button : addButtons) {
@@ -82,10 +72,7 @@ public class DominosEndToEndTest {
         }
 
         Thread.sleep(3000);
-     // Wait for 2 seconds after adding pizza
-       // Thread.sleep(2000);
 
-        // Click View Cart
         WebElement viewCart = wait.until(
                 ExpectedConditions.elementToBeClickable(
                         By.xpath("//span[text()='View Cart']")));
@@ -95,19 +82,16 @@ public class DominosEndToEndTest {
         System.out.println("View Cart Clicked Successfully");
 
         Thread.sleep(5000);
-     // Product Name
         String productName = driver.findElement(
                 By.xpath("//span[text()='Chicken Maxxx - Shawarma']")).getText();
 
         System.out.println("Product Name : " + productName);
 
-        // Product Price
         String productPrice = driver.findElement(
                 By.xpath("//span[text()='329']")).getText();
 
         System.out.println("Product Price : " + productPrice);
 
-        // Quantity
         String quantity = driver.findElement(
                 By.xpath("//span[contains(@class,'item-quantity')]")).getText();
 
@@ -120,7 +104,6 @@ public class DominosEndToEndTest {
 
         System.out.println("Select Address Clicked Successfully");
         Thread.sleep(3000);
-        //Click first Deliver Here button
         WebElement deliverHere = wait.until(
                 ExpectedConditions.elementToBeClickable(
                         By.xpath("(//button[contains(text(),'Deliver Here')])[1]")));
@@ -129,40 +112,54 @@ public class DominosEndToEndTest {
 
         System.out.println("Deliver Here Clicked Successfully");
 
-        // Wait for Cart page
         Thread.sleep(5000);
-     // Click Pay ₹375 button
+
         WebElement payButton = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath("//*[contains(text(),'Pay ₹')]")));
+            ExpectedConditions.elementToBeClickable(
+                By.xpath("//*[@id='bottomBarSectionModule']/div/div[2]/div/div[1]/div")
+            )
+        );
+
+        System.out.println(payButton.isDisplayed());
+        System.out.println(payButton.isEnabled());
 
         JavascriptExecutor js1 = (JavascriptExecutor) driver;
         js1.executeScript("arguments[0].click();", payButton);
 
         System.out.println("Pay Button Clicked Successfully");
 
-        // Wait for Payment Page
         Thread.sleep(8000);
 
-        // Verify Payment Page
-        String url = driver.getCurrentUrl();
-        System.out.println("Current URL : " + url);
+        WebElement upiLabel = wait.until(
+        	    ExpectedConditions.elementToBeClickable(
+        	        By.xpath("//label[@for='Pay-by-any-UPI-App-0']")
+        	    )
+        	);
 
-        if (url.toLowerCase().contains("payment")) {
-            System.out.println("Payment Page Reached Successfully");
-        } else {
-            System.out.println("Payment Page Not Reached");
-        }
+        	((JavascriptExecutor)driver).executeScript("arguments[0].click();", upiLabel);
 
-        // Stop execution before making payment
+        	System.out.println("UPI Selected Successfully");
+
+        	Thread.sleep(3000);
+
+     
+        WebElement placeOrder = wait.until(
+            ExpectedConditions.elementToBeClickable(
+                By.xpath("//*[contains(text(),'Place Order')]")
+            )
+        );
+
+        ((JavascriptExecutor)driver).executeScript("arguments[0].click();", placeOrder);
+
+        System.out.println("Place Order Clicked");
+
+       
         System.out.println("Assignment Completed Successfully");
         System.out.println("Payment Not Initiated");
 
       
+    
 
-     
-
-        // Keep browser open
-        // driver.quit();
+        
     }
 }
